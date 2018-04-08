@@ -185,7 +185,7 @@ contract SophosToken is StandardToken {
     string public name = "Sophos";
     string public symbol = "SOPH";
     uint public decimals = 8 ;
-    uint public INITIAL_SUPPLY = 3 * (10 ** 7); // Initial supply is 30,000,000
+    uint public INITIAL_SUPPLY = 3000000000000000; // Initial supply is 30,000,000
 
     function SophosToken() {
         totalSupply = INITIAL_SUPPLY;
