@@ -206,7 +206,8 @@ contract SophosToken is StandardToken
     // Allocation Constants
 
     // Expiration Unix Timestamp: Friday, November 1, 2019 12:00:00 AM
-    uint public constant     ALLOCATION_LOCK_END_TIMESTAMP = 1572566400;
+    // https://www.unixtimestamp.com
+    uint public constant ALLOCATION_LOCK_END_TIMESTAMP = 1572566400;
 
     address public constant RAVI_ADDRESS = 0xB75066802f677bb5354F0850A1e1d3968E983BE8;
     uint public constant    RAVI_ALLOCATION = 120000000000000; // 4%
@@ -224,13 +225,16 @@ contract SophosToken is StandardToken
     {
         // Set total supply
         totalSupply = INITIAL_SUPPLY;
+
         // Allocate total supply to sender
         balances[msg.sender] = totalSupply;
+
         // Subtract team member allocations from total supply
         balances[msg.sender] -= RAVI_ALLOCATION;
         balances[msg.sender] -= JULIAN_ALLOCATION;
         balances[msg.sender] -= ABDEL_ALLOCATION;
         balances[msg.sender] -= ASHLEY_ALLOCATION;
+
         // Credit Team Member Allocation Addresses
         balances[RAVI_ADDRESS]   = RAVI_ALLOCATION;
         balances[JULIAN_ADDRESS] = JULIAN_ALLOCATION;
@@ -238,16 +242,19 @@ contract SophosToken is StandardToken
         balances[ASHLEY_ADDRESS] = ASHLEY_ALLOCATION;
     }
 
+    // Stop transactions from team member allocations during lock period
     function isAllocationLocked(address _spender) constant returns (bool)
     {
         return inAllocationLockPeriod() && isTeamMember(_spender);
     }
 
+    // True if the current timestamp is before the allocation lock period
     function inAllocationLockPeriod() constant returns (bool)
     {
         return (block.timestamp < ALLOCATION_LOCK_END_TIMESTAMP);
     }
 
+    // Is the spender address one of the Sophos Team?
     function isTeamMember(address _spender) constant returns (bool)
     {
         return _spender == RAVI_ADDRESS  ||
@@ -256,6 +263,7 @@ contract SophosToken is StandardToken
             _spender == ASHLEY_ADDRESS;
     }
 
+    // Function wrapper to check for allocation lock
     function approve(address spender, uint tokens)
     {
         if (isAllocationLocked(spender))
@@ -268,6 +276,7 @@ contract SophosToken is StandardToken
         }
     }
 
+    // Function wrapper to check for allocation lock
     function transfer(address to, uint tokens) onlyPayloadSize(2 * 32)
     {
         if (isAllocationLocked(to))
@@ -280,6 +289,7 @@ contract SophosToken is StandardToken
         }
     }
 
+    // Function wrapper to check for allocation lock
     function transferFrom(address from, address to, uint tokens) onlyPayloadSize(3 * 32)
     {
         if (isAllocationLocked(from) || isAllocationLocked(to))
