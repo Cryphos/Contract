@@ -1,2 +1,2 @@
 # Contract
-The Sophos Token Contract
+The Cryphos Token Contract
