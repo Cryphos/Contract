@@ -189,14 +189,14 @@ contract StandardToken is BasicToken, ERC20
 }
 
 /**
- * @title Sophos ERC20 token
+ * @title Cryphos ERC20 token
  *
- * @dev Implementation of the Sophos Token.
+ * @dev Implementation of the Cryphos Token.
  */
-contract SophosToken is StandardToken
+contract Cryphos is StandardToken
 {
-    string public name = "Sophos";
-    string public symbol = "SOPH";
+    string public name = "Cryphos";
+    string public symbol = "XCPS";
     uint public decimals = 8 ;
 
     // Initial supply is 30,000,000.00000000
@@ -221,7 +221,7 @@ contract SophosToken is StandardToken
     address public constant ASHLEY_ADDRESS = 0xb37B31f004dD8259F3171Ca5FBD451C03c3bC0Ae;
     uint public constant    ASHLEY_ALLOCATION = 210000000000000; // 7%
 
-    function SophosToken()
+    constructor()
     {
         // Set total supply
         totalSupply = INITIAL_SUPPLY;
@@ -241,11 +241,12 @@ contract SophosToken is StandardToken
         balances[ABDEL_ADDRESS]  = ABDEL_ALLOCATION;
         balances[ASHLEY_ADDRESS] = ASHLEY_ALLOCATION;
     }
-
+    
     // Stop transactions from team member allocations during lock period
     function isAllocationLocked(address _spender) constant returns (bool)
     {
-        return inAllocationLockPeriod() && isTeamMember(_spender);
+        return inAllocationLockPeriod() && 
+        (isTeamMember(_spender) || isTeamMember(msg.sender));
     }
 
     // True if the current timestamp is before the allocation lock period
@@ -254,7 +255,7 @@ contract SophosToken is StandardToken
         return (block.timestamp < ALLOCATION_LOCK_END_TIMESTAMP);
     }
 
-    // Is the spender address one of the Sophos Team?
+    // Is the spender address one of the Cryphos Team?
     function isTeamMember(address _spender) constant returns (bool)
     {
         return _spender == RAVI_ADDRESS  ||
